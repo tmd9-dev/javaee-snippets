@@ -1,19 +1,46 @@
-plugins {
-    id 'java'
-    id 'application'
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.bmuschko:gradle-tomcat-plugin:2.5'
+    }
 }
 
-group 'xyz.tmd9'
-version '1.0-SNAPSHOT'
-
-sourceCompatibility = 1.8
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'com.bmuschko.tomcat'
 
 repositories {
     mavenCentral()
 }
 
+
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    // https://mvnrepository.com/artifact/javax/javaee-web-api
+    compileOnly group: 'javax', name: 'javaee-web-api', version: '7.0'
+    // https://mvnrepository.com/artifact/javax.faces/javax.faces-api
+    compileOnly group: 'javax.faces', name: 'javax.faces-api', version: '2.2'
+    // https://mvnrepository.com/artifact/javax.enterprise/cdi-api
+    compileOnly group: 'javax.enterprise', name: 'cdi-api', version: '1.2'
+
+    // https://mvnrepository.com/artifact/org.apache.myfaces.core/myfaces-api
+    runtimeOnly group: 'org.apache.myfaces.core', name: 'myfaces-api', version: '2.2.12'
+    // https://mvnrepository.com/artifact/org.apache.myfaces.core/myfaces-impl
+    runtimeOnly group: 'org.apache.myfaces.core', name: 'myfaces-impl', version: '2.2.12'
+    // https://mvnrepository.com/artifact/org.jboss.weld.servlet/weld-servlet
+    runtimeOnly group: 'org.jboss.weld.servlet', name: 'weld-servlet', version: '2.4.8.Final'
+
+
+    def tomcatVersion = '9.0.1'
+    tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+            "org.apache.tomcat.embed:tomcat-embed-logging-juli:9.0.0.M6",
+            "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
+
 }
 
-mainClassName = 'xyz.tmd9.Hello'
+tomcat {
+    httpProtocol = 'org.apache.coyote.http11.Http11Nio2Protocol'
+    ajpProtocol  = 'org.apache.coyote.ajp.AjpNio2Protocol'
+}
