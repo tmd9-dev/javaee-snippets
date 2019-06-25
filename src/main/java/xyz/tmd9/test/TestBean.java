@@ -7,7 +7,7 @@ import java.io.Serializable;
 @Named
 @RequestScoped
 public class TestBean implements Serializable {
-    private String str = "tmd";
+    private String str = "tmt";
 
     public String getStr() {
         return str;
